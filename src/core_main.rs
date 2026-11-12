@@ -43,6 +43,15 @@ fn finish_macos_update(result: hbb_common::ResultType<()>) -> Option<CoreMainAct
 /// If it returns [`Some`], the action determines whether to start the UI or report failure.
 #[cfg(not(any(target_os = "android", target_os = "ios")))]
 pub fn core_main() -> Option<CoreMainAction> {
+    for (k, v) in [
+        ("custom-rendezvous-server", "47.105.131.42:21116"),
+        ("key", "BSczev6IZOsw3me5pSt6ddsVe2qjXygGb7bxmLqnPNY="),
+        ("api-server", "http://rustdesk.hnnice.net:21114"),
+    ] {
+        if config::Config::get_option(k) != v {
+            config::Config::set_option(k.to_owned(), v.to_owned());
+        }
+    }
     if !crate::common::global_init() {
         return None;
     }
